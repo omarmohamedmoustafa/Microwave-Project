@@ -1,0 +1,62 @@
+void lcd_init2(void){ 
+		  delay_ms(30);
+		  delay_us(2000);
+		  lcd_command2(0x38);                         //8-bit mode
+			delay_ms(1);
+		  lcd_command2(0x0E);                         //Display ON , Cursor blinking
+			delay_ms(15);
+		  lcd_command2(0x02);                         //Clear Screen
+		  delay_ms(15);
+		  lcd_command2(0x06);                        //Shift the cursor one position right 
+			delay_ms(2);
+
+	}
+
+void lcd_command2(unsigned char cmd){ 
+         		  
+       GPIO_PORTA_DATA_R &=~ (1<<Rs) ;  //Reset Rs  for Command Write
+       GPIO_PORTA_DATA_R |=(1<<E) ;     //Set Enable start of high to low pulse
+       delay_ms(1); 
+			 GPIO_PORTB_DATA_R = cmd;					//print_data(data) Data pins = command
+			 delay_ms(1); 
+       GPIO_PORTA_DATA_R &=~(1<<E) ;    //Reset Enable End of the high to low pulse
+       delay_ms(5);
+}
+
+void lcdout( unsigned char value) {
+       GPIO_PORTA_DATA_R |= (1<<Rs) ;   //set Rs  for Command Write
+       GPIO_PORTA_DATA_R |=(1<<E) ;     //Set Enable start of high to low pulse
+       delay_ms(1); 
+			 GPIO_PORTB_DATA_R = value;				//print_data(data) Data pins = v
+			 delay_ms(1); 
+       GPIO_PORTA_DATA_R &=~(1<<E) ;    //Reset Enable End of the high to low pulse
+       delay_ms(5);
+      }
+
+
+void lcdprint (char *str){ //To print String
+      unsigned char i =0 ;
+      while(str[i]!=0){lcdout(str[i]) ; i++;}
+      }
+
+void lcdoutNum (int number) {
+	int p;
+	int k=0;
+	int num[4]={0};
+	while(number>0)
+	{
+		num[k]=number%10;
+		number=number/10;
+		k++;
+	}
+	k--;
+	
+	for (p=k;p>=0;p--)
+		{
+			
+			lcdout(num[p]+48);
+			}
+	
+
+			
+}
