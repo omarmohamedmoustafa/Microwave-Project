@@ -1,3 +1,6 @@
+#define 	Rs 	5
+#define 	E 	7
+
 void lcd_init2(void){ 
 		  delay_ms(30);
 		  delay_us(2000);
