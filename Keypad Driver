@@ -1,0 +1,24 @@
+
+void row_activate(unsigned short column){//port c hena out (rows) try#3
+		GPIO_PORTC_DATA_R = (1<<(column+4));
+}
+unsigned short portE_DATA(){
+		return (GPIO_PORTE_DATA_R & 0x0F);
+}
+unsigned char matrix[4][4]={{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};
+
+char keypad(void){
+		while(1){
+			unsigned short row,column;
+				for (row=0;row<4;row++){
+						row_activate(row);
+						delay_us(2);
+						for(column=0;column<4;column++){
+								if(portE_DATA() & (1<<column)){
+										return matrix[row][column];
+								}
+						}
+				}
+		}
+}
+
