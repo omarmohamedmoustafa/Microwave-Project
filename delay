@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <C:\Keil\Labware\inc\tm4c123gh6pm.h>
-#include <ctype.h>
 
 void SysTick_Wait(uint32_t delay){
 		NVIC_ST_CTRL_R = 0;
