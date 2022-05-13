@@ -1,4 +1,3 @@
-
 void row_activate(unsigned short column){//port c hena out (rows) try#3
 		GPIO_PORTC_DATA_R = (1<<(column+4));
 }
