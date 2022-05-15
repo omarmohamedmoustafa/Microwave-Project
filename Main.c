@@ -46,6 +46,74 @@ void idle(){
 	GPIO_PORTF_DATA_R &=~0XE; //turn off leds
 }
 
+//pause state
+void pause(){
+	while ((GPIO_PORTF_DATA_R & 0x10 ) != 0x00 && (GPIO_PORTF_DATA_R & 0x01 ) != 0x00)
+		{ 	//out of pause if sw1 or sw 2 is pressed
+				GPIO_PORTF_DATA_R = GPIO_PORTF_DATA_R ^ 0x0E; // blink leds
+				delay_ms(90);
+		}	
+}
+
+
+
+//Cooking state
+int  cooking(int t){
+	while (((GPIO_PORTF_DATA_R & 0x01) != 0 )|| ((GPIO_PORTD_DATA_R & 0x8) == 0x0 ) ) {}; //start cooking when sw2 is pressed
+	buzz(0);
+	for(;t>0;t--) //count down
+	{	
+		GPIO_PORTF_DATA_R |= 0x0E;
+
+					if((GPIO_PORTF_DATA_R & 0x10) == 0x00 || ((GPIO_PORTD_DATA_R & 0x08)==0x00)) //Pause when sw1 is pressed or door is open
+					{
+							delay_ms(1000);
+							pause();
+							delay_ms(1000);
+
+							if ((GPIO_PORTF_DATA_R & 0x10) ==0x00)				//idle state when sw1 pressed again 
+							{
+								idle();	
+								return 0;
+							}		
+					}
+					
+		lcd_command2(0xC0);			// start write in second line
+					
+					if(t<10)	//print numbers below 10 in right digit
+					{ 
+							lcd_command2(0xC0);
+							lcdout('0');
+							lcdoutNum(t);
+							delay_ms(1000);
+					}
+					else
+					{
+							lcdoutNum(t);
+							delay_ms(1000);
+					}
+					
+					if (t==1)
+					{
+							lcd_command2(0xC0);
+							lcdprint("00");
+						
+							for (buz = 0 ; buz <3 ; buz++)		 // at end of cooking buzz and blink leds 3 times  
+							{	
+								buzz(1);
+								GPIO_PORTF_DATA_R = GPIO_PORTF_DATA_R ^ 0x0E;
+								delay_ms(300);
+								buzz(0);
+								GPIO_PORTF_DATA_R = GPIO_PORTF_DATA_R ^ 0x0E;
+								delay_ms(1000);
+							}			
+					}
+	}
+	
+	GPIO_PORTF_DATA_R &=~ 0x0E; 	//turn off leds after blinking
+	idle();			  	//return back to idle state
+	return 1;
+}
 
 
 
