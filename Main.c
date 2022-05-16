@@ -186,16 +186,16 @@ int main()
 						  lcdprint("Chicken weight?");	//show previous message.
 						  key =keypad();
 						}
-					//Display weight of Chicken for 2 seconds
-					lcd_command2(0x01);
-					delay_us(2000);
-					lcdout(keypad());
-					lcd_command2(0x81);
-					lcdprint(" kg");
-					delay_ms(2000);
-					lcd_command2(0x01);
-					delay_us(2000);
-					cooking(12*(key-48));						//calculate time , go to cooking state
-					break;
+						//Display weight of Chicken for 2 seconds
+						lcd_command2(0x01);
+						delay_us(2000);
+						lcdout(keypad());
+						lcd_command2(0x81);
+						lcdprint(" kg");
+						delay_ms(2000);
+						lcd_command2(0x01);
+						delay_us(2000);
+						cooking(12*(key-48));						//calculate time , go to cooking state
+						break;
 				}	
 }
