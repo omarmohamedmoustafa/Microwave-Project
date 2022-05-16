@@ -197,5 +197,77 @@ int main()
 						delay_us(2000);
 						cooking(12*(key-48));						//calculate time , go to cooking state
 						break;
-				}	
+			 case 'D':{
+			 label:
+						delay_ms(100);
+						lcdprint("Cooking Time?");
+						delay_ms(100);
+						lcd_command2(0xC0);					//Start write in second line
+						lcdprint("00:00");					//print "00:00" for start
+			
+			
+					while (((GPIO_PORTF_DATA_R & 0x10 ) != 0x00) || ((GPIO_PORTF_DATA_R & 0x01 ) != 0x00)) //store values while sw1&sw2 not pressed
+						{		
+						//Store keypad input in timer[4]
+						lcd_command2(0xc0);
+						timer[4]=(keypad()-48);				//convert character to integer
+						delay_ms(200);
+						for(f=1;f<5;f++) 							//Display time on LCD
+						{
+							lcdout(timer[f]+48);
+							if (f==2) lcdout(':');		// display "minutes : seconds" after 2nd digit (minutes)
+						}
+					
+						
+						if((GPIO_PORTF_DATA_R & 0x11) == 0x11)  //Check if not sw1&sw2 not pressed 
+						{
+							for(j=0;j<4;j++)						//shifting the entered digits from right to left
+							{ 
+								timer[j]=timer[j+1];	
+							}
+							
+						}
+						else{break;}
+
+						if (keypad() == '*') //press '*' to break while 
+						{
+							break;
+						}
+					
+					}
+				
+				while (((GPIO_PORTF_DATA_R & 0x10 ) != 0x00) && ((GPIO_PORTF_DATA_R & 0x01 ) != 0x00)){}	
+					if((GPIO_PORTF_DATA_R & 0x01)== 0)			//press sw2 to go to cooking state
+					{	
+						t = (timer[0]*10 + timer[1])*60;
+						t+= timer[2]*10 + timer[3]; 					//Calculate time in seconds
+						for (k = 0 ; k <5 ; k++)
+						{
+                                                  timer[k] = 0;
+                                                }						
+						
+						if((t > 1800) || ((GPIO_PORTF_DATA_R & 0x10 ) == 0x00))													//check if timer > 30min
+						{	
+							lcd_command2(0x01);									//clear LCD
+							delay_us(2000);
+							lcdprint("Enter num <= 30 ");				//print error
+							goto label;													//return back to D state
+						}	
+						lcd_command2(0x01);										//clear LCD
+						delay_us(2000);
+						cooking(t);														//go to cooking state
+						
+					}
+					else
+					{
+						idle();
+					}
+					break;
+				}
+			default :{						
+					idle();
+					break;
+			         }
+		}
+	}
 }
