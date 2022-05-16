@@ -140,4 +140,62 @@ int main()
 						cooking(60);
 						break;
 			}
+			case 'B':{
+						delay_ms(100);
+						lcdprint("Beef weight?");
+						delay_ms(100);
+						key =keypad();
+						while(key<49 || key>57)			//check for valid number (from 1 to 9)
+						{	
+						  lcd_command2(0x01);
+						  delay_us(2000);
+						  lcdprint("Err");					//LCD should show �Err� for 2 seconds,
+						  delay_ms(2000);
+						  lcd_command2(0x01);				//clear LCD
+						  delay_us(2000);
+						  lcdprint("Beef weight?"); //show previous message.
+						  key =keypad();
+						}
+						//Display weight of beef for 2 seconds
+						lcd_command2(0x01);
+						delay_us(2000);
+						lcdout(keypad());
+						lcd_command2(0x81);
+						lcdprint(" kg");
+						delay_ms(2000);
+						lcd_command2(0x01);
+						delay_us(2000);
+						cooking(30*(key-48)); //calculate time , go to cooking state
+						break;
+				}
+			
+			case 'C':{
+						delay_ms(100);
+						lcdprint("Chicken weight?");
+						delay_ms(100);
+						key =keypad();
+				
+						while(key<49 || key>57)					//check for valid number (from 1 to 9)
+						{	
+						  lcd_command2(0x01);
+					          delay_us(2000);
+						  lcdprint("Err");							//LCD should show �Err� for 2 seconds,
+						  delay_ms(2000);
+						  lcd_command2(0x01);						//clear LCD
+						  delay_us(2000);
+						  lcdprint("Chicken weight?");	//show previous message.
+						  key =keypad();
+						}
+					//Display weight of Chicken for 2 seconds
+					lcd_command2(0x01);
+					delay_us(2000);
+					lcdout(keypad());
+					lcd_command2(0x81);
+					lcdprint(" kg");
+					delay_ms(2000);
+					lcd_command2(0x01);
+					delay_us(2000);
+					cooking(12*(key-48));						//calculate time , go to cooking state
+					break;
+				}	
 }
