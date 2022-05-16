@@ -13,11 +13,12 @@ void PortC_Init(){
            
 }
 
-//connectiong the columns of keypad as inpput and on E0-E1-E2-E3
+//connectiong the columns of keypad as inpput and on E0-E1-E2-E3	and buzz on E4
 void PortE_Init(){
 		SYSCTL_RCGCGPIO_R |= 0x10;		//Enable clock to PORTE  
 		while((SYSCTL_PRGPIO_R & 0x10)==0);	//wait for clock to be setted
-		GPIO_PORTE_DIR_R &= ~0x0F; //set E0-E3 as input pins
+		GPIO_PORTE_DIR_R &= ~0x0F; //set E0-E3 as input pins and E4 output
+		GPIO_PORTE_DIR_R |=0x10; //buzz out
 		GPIO_PORTE_DEN_R |=0x1F;
 		GPIO_PORTE_AMSEL_R &= ~0x1F;
 		GPIO_PORTE_AFSEL_R &= ~0x1F;
