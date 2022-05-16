@@ -113,7 +113,13 @@ int  cooking(int t){
 	idle();			  	//return back to idle state
 	return 1;
 }
-
+char key =0;                //store keypad value
+int timer[5]={0};        //D state timer array
+// loops variables
+int t=0;
+int f=0;
+int j=3;
+int k=0;
 
 
 
@@ -197,6 +203,7 @@ int main()
 						delay_us(2000);
 						cooking(12*(key-48));						//calculate time , go to cooking state
 						break;
+			          }
 			 case 'D':{
 			 label:
 						delay_ms(100);
