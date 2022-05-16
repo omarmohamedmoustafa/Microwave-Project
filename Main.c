@@ -149,7 +149,7 @@ int main()
 						{	
 						  lcd_command2(0x01);
 						  delay_us(2000);
-						  lcdprint("Err");					//LCD should show �Err� for 2 seconds,
+						  lcdprint("Err");					//LCD should show Err for 2 seconds,
 						  delay_ms(2000);
 						  lcd_command2(0x01);				//clear LCD
 						  delay_us(2000);
@@ -179,7 +179,7 @@ int main()
 						{	
 						  lcd_command2(0x01);
 					          delay_us(2000);
-						  lcdprint("Err");							//LCD should show �Err� for 2 seconds,
+						  lcdprint("Err");						//LCD should show Err for 2 seconds,
 						  delay_ms(2000);
 						  lcd_command2(0x01);						//clear LCD
 						  delay_us(2000);
