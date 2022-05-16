@@ -19,25 +19,24 @@ void PortF_Init(){
 	GPIO_PORTF_PCTL_R &= ~0x0FFFFF;	
 	GPIO_PORTF_PUR_R |= 0x11; //make pull up resistance for switch 1 and 2
 	}
-void PortD_Init(){
+void PortD_Init(){ // connecting sw3 (door) on PD3
 	SYSCTL_RCGCGPIO_R |= 0x08; // activate Port D
 	while((SYSCTL_PRGPIO_R&0x00000008) == 0){};
 	GPIO_PORTD_LOCK_R = 0x4c4F434B;
-	GPIO_PORTD_CR_R |= 0x09;
-	GPIO_PORTD_DIR_R 	= 0x01; 
-	GPIO_PORTD_DATA_R = 0x00;
-	GPIO_PORTD_DEN_R |= 0x09; // digital Input on PF1-3
-	GPIO_PORTD_AMSEL_R &= ~0x09;
-	GPIO_PORTD_AFSEL_R &= ~0x09;
-	GPIO_PORTD_PCTL_R &= ~0xF00F;	
+	GPIO_PORTD_CR_R |= 0x08;
+	GPIO_PORTD_DIR_R = 0x00; 
+	GPIO_PORTD_DEN_R |= 0x08; // digital Input on PD3 SW3
+	GPIO_PORTD_AMSEL_R &= ~ 0x08;
+	GPIO_PORTD_AFSEL_R &= ~ 0x08;
+	GPIO_PORTD_PCTL_R &= ~ 0xF000;	
 	GPIO_PORTD_PUR_R |= 0x08;	//make pull up resistance for switch 3
 	}
 
 int buz = 0;
 	//Buzz function
 void buzz(bool num){
-	if (num) GPIO_PORTD_DATA_R |= 0x01;
-	else GPIO_PORTD_DATA_R &= ~0x01;
+	if (num) GPIO_PORTE_DATA_R |= 0x10;
+	else GPIO_PORTE_DATA_R &= ~ 0x10;
 }
 //Idle state
 void idle(){ 
